@@ -1,21 +1,21 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseNotFound,HttpResponseRedirect
-# Create your views here.
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.template.loader import render_to_string
 from django.urls import reverse
 
 monthly_challenges = {
-    'january':'Eat meat',
-    'february':'Eat apple',
-    'march':'Eat pie',
-    'april':'Eat nothing',
-    'may':'Eat something',
-    'june':'Eat anything',
-    'july':'Eat ice',
-    'august':'Eat bubble',
-    'september':'Eat carrot',
-    'october':'Eat mayoneese',
-    'november':'Eat sausage',
-    'december':'Eat potatpop',
+    'january': 'Eat meat',
+    'february': 'Eat apple',
+    'march': 'Eat pie',
+    'april': 'Eat nothing',
+    'may': 'Eat something',
+    'june': 'Eat anything',
+    'july': 'Eat ice',
+    'august': 'Eat bubble',
+    'september': 'Eat carrot',
+    'october': 'Eat mayoneese',
+    'november': 'Eat sausage',
+    'december': 'Eat potatpop',
 
 }
 
@@ -24,7 +24,7 @@ def monthly_challenge(request, month):
 
     try:
         text = monthly_challenges[month]
-        response_data = f"<h1 style=color:red;background-color:blue;>{text}</h1>"
+        response_data = render_to_string('challenges/challenge.html')
         return HttpResponse(response_data)
     except:
         return HttpResponseNotFound('This month is not supported!')
@@ -37,7 +37,7 @@ def monthly_challenge_by_number(request, month):
         return HttpResponseNotFound('Invalid month')
 
     m = months_by_name[month-1]
-    redirected_path = reverse('month-challenge',args=[m])
+    redirected_path = reverse('month-challenge', args=[m])
 
     return HttpResponseRedirect(redirected_path)
 
@@ -48,4 +48,3 @@ def month_list(request):
 
     ul = f"<ul>{' '.join(str(x) for x in data)}</ul>"
     return HttpResponse(ul)
-
